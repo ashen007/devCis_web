@@ -8,7 +8,7 @@ function windowHeight() {
     console.log(imgHeight);
     document.querySelector('div.login_form_img').style.cssText = 'height: ' + imgHeight + 'px;';
 }
-//adding floating hint
+/*//adding floating hint
 function addHint(clicked) {
     let clickedField = clicked.target;
     let inputSections = document.querySelector('form.form_content').children;
@@ -36,7 +36,7 @@ function addHint(clicked) {
     if(!clickedField.classList.contains('username') && !fields.includes(clickedField.parentElement)) {
         document.removeEventListener('click', addHint, false);
     }
-}
+}*/
 
 //event handling
 

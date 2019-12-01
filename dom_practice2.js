@@ -1,3 +1,6 @@
+let i = 0;
+let parentClass;
+let clickedPrev = [];
 let imgHeight = window.innerHeight;
 document.querySelector('div.login_form_img').style.cssText = 'height: ' + imgHeight + 'px;';
 
@@ -7,6 +10,68 @@ function windowHeight() {
 
     console.log(imgHeight);
     document.querySelector('div.login_form_img').style.cssText = 'height: ' + imgHeight + 'px;';
+}
+// find clicked input method
+function searchClickedElemnt(target, clickArray) {
+    if (target.classList.contains('form_inputs')) {
+        parentClass = target.parentElement.getAttribute('id');
+        if (i < 1) {
+            clickArray[0] = target;
+        }
+    }
+}
+
+// adding active class and create floating hint
+function addFloatingHint(target) {
+    target.parentElement.insertAdjacentHTML('afterbegin', '<div></div>');
+    target.parentElement.firstElementChild.insertAdjacentHTML('afterbegin', 'Enter ' + parentClass);
+    target.removeAttribute('placeholder');
+    target.classList.add('active');
+}
+
+// remove active class and floating hint
+function removeFloatingHint(target) {
+    let hint = target.parentElement.querySelector('div');
+
+    target.parentElement.removeChild(hint);
+    target.classList.remove('active');
+    target.setAttribute('placeholder', clickedPrev[0].parentElement.getAttribute('id'));
+
+}
+
+//getting targeted element
+function addHint(clicked) {
+    let inputValue;
+    let getClickedElement = clicked.target;
+    let isActive = getClickedElement.classList.contains('active');
+
+//click on input method
+    if (getClickedElement.classList.contains('form_inputs')) {
+        searchClickedElemnt(getClickedElement, clickedPrev);
+        inputValue = clickedPrev[0].value;
+//firstly click on one input metode and then click on another
+        if (!isActive && !(clickedPrev[0].parentElement.getAttribute('id') == parentClass) && i > 0 && !(inputValue != '')) {
+            removeFloatingHint(clickedPrev[0]);
+            clickedPrev[0] = getClickedElement;
+            i = 0;
+        }
+//first time click on input methode 
+        if (!isActive && getClickedElement.classList.contains(parentClass)) {
+            addFloatingHint(getClickedElement);
+        }
+        i++;
+    }
+
+//click outside from input method
+    if (!getClickedElement.classList.contains('form_inputs')) {
+        inputValue = clickedPrev[0].value;
+//click on input method first and then click outside from input methode 
+        if (i != 0 && clickedPrev[0].classList.contains('active') && !(inputValue != '')) {
+            console.log(inputValue);
+            removeFloatingHint(clickedPrev[0]);
+            i = 0;
+        }
+    }
 }
 /*//adding floating hint
 function addHint(clicked) {
